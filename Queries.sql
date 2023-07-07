@@ -156,10 +156,24 @@ ORDER BY total_price DESC;
 We determine the most popular genre as the genre with the highest amount of purchases. 
 Write a query that returns each country along with the top Genre. 
 For countries where the maximum number of purchases is shared return all Genres
+
+ans) 
 */
 
+WITH popular_genre AS(
+	SELECT i.billing_country AS country, g.name AS genre_name,COUNT(g.name) AS top_genre,
+	DENSE_RANK() OVER(PARTITION BY i.billing_country ORDER BY COUNT(g.name) DESC) AS rank_number
+	FROM invoice As i
+	INNER JOIN invoice_line AS il ON i.invoice_id = il.invoice_id
+	INNER JOIN track AS t ON il.track_id = t.track_id
+	INNER JOIN genre AS g ON t.genre_id = g.genre_id
+	GROUP BY country,genre_name
+	ORDER BY country
+)
 
-
+SELECT pg.country, pg.genre_name, pg.top_genre 
+FROM popular_genre AS pg
+WHERE pg.rank_number <=1;
 
 
 /*
