@@ -124,4 +124,58 @@ LIMIT 10;
 /*
 8) Return all the track names that have a song length longer than the average song length.
 Return the Name and Milliseconds for each track. Order by the song length with the longest songs listed first
+ans) Tracks-> we have song length as milliseconds name is also in milliseconds
 */
+
+SELECT name, milliseconds
+FROM track
+WHERE milliseconds > (SELECT AVG(milliseconds) FROM track)
+ORDER BY milliseconds DESC;
+
+
+/*
+9) Find how much amount spent by each customer on artists? 
+Write a query to return customer name, artist name and total spent
+
+ans) Here we need to use cutomer table and aritist table
+customer table join with invoice-> invoiceline-> track-> album-> artist
+*/
+SELECT c.first_name || ' ' || c.last_name AS full_name, at.name, SUM(il.quantity*il.unit_price) AS total_price
+FROM customer AS c
+INNER JOIN invoice AS i ON c.customer_id = i.customer_id
+INNER JOIN invoice_line AS il ON i.invoice_id = il.invoice_id
+INNER JOIN track AS t ON il.track_id =t.track_id
+INNER JOIN album AS al on t.album_id = al.album_id
+INNER JOIN artist AS at ON al.artist_id = at.artist_id
+GROUP BY full_name,at.name
+ORDER BY total_price DESC;
+
+
+/*
+10) We want to find out the most popular music Genre for each country.
+We determine the most popular genre as the genre with the highest amount of purchases. 
+Write a query that returns each country along with the top Genre. 
+For countries where the maximum number of purchases is shared return all Genres
+*/
+
+
+
+
+
+/*
+11) Write a query that determines the customer that has spent the most on music foreach country. 
+Write a query that returns the country along with the top customer and how much they spent. 
+For countries where the top amount spent is shared, provide all customers who spent this amount
+*/
+
+
+
+
+
+
+
+
+
+
+
+
