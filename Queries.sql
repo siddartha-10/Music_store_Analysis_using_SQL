@@ -180,15 +180,24 @@ WHERE pg.rank_number <=1;
 11) Write a query that determines the customer that has spent the most on music foreach country. 
 Write a query that returns the country along with the top customer and how much they spent. 
 For countries where the top amount spent is shared, provide all customers who spent this amount
+
+ans) we have the countries in invoice table customer data in customer table
+group by customer id, country
+order by 
 */
 
 
+WITH most_spent AS (
+	SELECT c.customer_id, c.first_name || ' ' || c.last_name AS full_name, i.billing_country AS country,
+	SUM(i.total) AS total_spent
+	FROM customer AS c
+	INNER JOIN invoice AS i
+	ON c.customer_id = i.customer_id
+	GROUP BY c.customer_id, i.billing_country
+	ORDER BY full_name
+)
 
-
-
-
-
-
+SELECT * FROM most_spent;
 
 
 
