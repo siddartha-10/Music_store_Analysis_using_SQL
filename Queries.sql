@@ -1,5 +1,4 @@
-/* QUESTION -1 EASY SET
-
+/* 
 1) who is the senior most employee based on the title
 ans) in the employee table we can see that there is level column the max the level he is 
 senior most employee.
