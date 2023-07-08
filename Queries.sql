@@ -189,15 +189,18 @@ order by
 
 WITH most_spent AS (
 	SELECT c.customer_id, c.first_name || ' ' || c.last_name AS full_name, i.billing_country AS country,
-	SUM(i.total) AS total_spent
+	SUM(i.total) AS total_spent,
+	DENSE_RANK() OVER(PARTITION BY i.billing_country ORDER BY SUM(i.total) DESC) AS rank_number
 	FROM customer AS c
 	INNER JOIN invoice AS i
 	ON c.customer_id = i.customer_id
-	GROUP BY c.customer_id, i.billing_country
+	GROUP BY i.billing_country,c.customer_id
 	ORDER BY full_name
 )
 
-SELECT * FROM most_spent;
+SELECT * 
+FROM most_spent
+WHERE rank_number <=1;
 
 
 
